@@ -1,59 +1,85 @@
+# Archives and release assets
+*.zip
 *.tar
 *.tar.gz
-*.zip
+*.7z
+*.rar
+
+# Python virtual environments / portable runtime
+.venv/
 venv*/
 envs/
-slurm_logs/
-
-sync1.sh
-data_preprocess_pj1
-data-preparation1
-__pycache__
-*.log
-*.pyc
-.vscode
-debug/
-*.ipynb
-.idea
-
-# Python build artifacts
-*.egg-info/
-build/
-dist/
-*.egg
-
-# vscode history
-.history
-
-.DS_Store
 .env
+.env.*
 
-bad_words/
-bak/
+# MinerUI Portable runtime folders
+.cache/
+.tools/
+models/
+outputs/
+logs/
+dist/
+portable/
+MinerUI-Portable/
+MinerUI-Portable-*/
 
-app/tests/*
+# Python caches/build output
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.egg-info/
+*.egg
+build/
+.eggs/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Rust/Tauri build output
+target/
+desktop-tauri/src-tauri/target/
+Cargo.lock.bak
+
+# Node/web build output if added later
+node_modules/
+projects/web/node_modules/
+projects/web/dist/
+
+# Logs and temporary files
+*.log
 temp/
 tmp/
 tmp
-.vscode
+output/
+cli_debug/
+debug/
+debug_utils/
+slurm_logs/
+
+# IDE/editor/OS files
 .vscode/
+.idea/
+.history/
+.DS_Store
+Thumbs.db
+
+# Upstream/development leftovers
+sync1.sh
+data_preprocess_pj1
+data-preparation1
+bad_words/
+bak/
 ocr_demo
-.coveragerc
+source.dev.env
+projects/web_demo/web_demo/static/
+app/tests/*
 /app/common/__init__.py
 /magic_pdf/config/__init__.py
-source.dev.env
 
-tmp
-
-projects/web/node_modules
-projects/web/dist
-
-projects/web_demo/web_demo/static/
-cli_debug/
-debug_utils/
-
-# sphinx docs
-_build/
-
-
-output/
+# Do not commit downloaded wheels/models by accident
+*.whl
+*.onnx
+*.safetensors
+*.pt
+*.pth
