@@ -9,7 +9,7 @@
 
 **MinerUI Portable** is a portable Windows desktop launcher for **MinerU 3.4.0**.
 
-It is made for the case where you do not want a global Python setup, a system-wide install, or a scattered AI toolchain. Unpack one folder, run one executable, keep all runtime files inside that folder, and delete the folder when you no longer need it.
+It is made for users who want a local, open-source MinerU runtime without a global Python setup, a system-wide install, or a scattered AI toolchain. Unpack one folder, run one executable, keep all runtime files inside that folder, and delete the folder when you no longer need it.
 
 This repository is **not the upstream MinerU project**. It is a portable desktop packaging/wrapper project around the upstream MinerU Python package and Gradio UI.
 
@@ -17,7 +17,9 @@ This repository is **not the upstream MinerU project**. It is a portable desktop
 
 Upstream MinerU is powerful, but a local Windows setup can become heavy and messy: Python, Torch, model cache, package cache and outputs may end up spread across the machine.
 
-MinerUI Portable keeps that runtime contained:
+The official MinerU website also offers an online web app and a client-oriented workflow. Upstream documentation describes the official online version as having the same functionality as the client and requiring login. MinerUI Portable is for a different workflow: run the open-source MinerU backend locally from one portable folder, without using the online account workflow for local parsing.
+
+MinerUI Portable keeps the runtime contained:
 
 ```text
 MinerUI-Portable/
@@ -75,10 +77,22 @@ MinerUI Portable has three separate backend/runtime layers:
 | VLM | **Supported** | Comes from upstream `mineru[vlm]` through `mineru[core]`; requires Torch and model downloads. |
 | Pipeline | **Supported** | Comes from upstream `mineru[pipeline]` through `mineru[core]`. |
 | Gradio UI | **Supported** | Comes from upstream `mineru[gradio]` through `mineru[core]`. |
-| vLLM server | Not a launcher mode in v1.0.0 | Upstream has a separate `mineru[vllm]` extra, but MinerUI Portable does not expose it as a first-class desktop mode. |
-| LMDeploy server | Not a launcher mode in v1.0.0 | Upstream has a Windows `lmdeploy` extra under `all`; MinerUI Portable avoids `all` by default to keep the portable install more controlled. |
+| vLLM server | Open-source upstream extra, but **not a launcher mode in v1.0.0** | Upstream provides `mineru[vllm]` and `mineru-vllm-server`, but MinerUI Portable does not expose it as a first-class desktop mode yet. |
+| LMDeploy server | Upstream Windows extra under `all`, but **not a launcher mode in v1.0.0** | MinerUI Portable avoids `all` by default to keep the portable install more controlled. |
 
 Important naming note: **VLM** and **vLLM** are different here. MinerUI Portable supports MinerU's VLM path via `mineru[core]`. It does not currently present upstream `mineru-vllm-server` as a dedicated launcher backend.
+
+### Hardware notes
+
+Upstream MinerU's quick-start table lists these minimum VRAM values for local deployment modes:
+
+| MinerU mode | Upstream minimum VRAM | Notes for MinerUI Portable |
+|---|---:|---|
+| Pipeline | 4 GB | Can also run in CPU mode, slower. |
+| VLM / Hybrid VLM | 8 GB | This is the relevant local VLM requirement. |
+| OpenAI-compatible HTTP client | 2 GB on the client side | The actual model server may run elsewhere; upstream mentions servers such as vLLM, SGLang or LMDeploy. |
+
+For **vLLM**, there is no single universal VRAM number in MinerUI Portable: it depends on the served model, context length, batching and vLLM configuration. Treat upstream's 8 GB value as the local VLM-mode baseline, not as a guarantee that every vLLM server setup will fit into 8 GB.
 
 ### Torch backend support
 
