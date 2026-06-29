@@ -1,0 +1,67 @@
+name: Installation problem
+description: Report a first-launch, Torch, dependency or model download problem
+title: "[Install]: "
+labels: ["install", "needs-log"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this template for installation, Torch download, uv, Python, cache or first launch problems.
+  - type: input
+    id: version
+    attributes:
+      label: MinerUI Portable version
+      placeholder: v1.0.0
+    validations:
+      required: true
+  - type: dropdown
+    id: install_stage
+    attributes:
+      label: Failed stage
+      options:
+        - uv installation
+        - Python 3.12 installation
+        - .venv creation
+        - Torch / torchvision download
+        - MinerU dependency installation
+        - Model download
+        - Gradio/WebUI start
+        - Not sure
+    validations:
+      required: true
+  - type: dropdown
+    id: backend
+    attributes:
+      label: Selected Torch backend
+      options:
+        - CUDA auto
+        - CUDA 12.6
+        - CUDA 12.8
+        - CPU
+        - Not sure
+    validations:
+      required: true
+  - type: input
+    id: path
+    attributes:
+      label: Install path
+      description: Example: D:\Tools\MinerUI-Portable
+      placeholder: D:\Tools\MinerUI-Portable
+  - type: input
+    id: disk
+    attributes:
+      label: Free disk space
+      placeholder: 40 GB free
+  - type: textarea
+    id: log
+    attributes:
+      label: logs/mineru-desktop.log
+      description: Paste relevant log output or attach the log file.
+      render: text
+    validations:
+      required: true
+  - type: textarea
+    id: extra
+    attributes:
+      label: Additional details
+      description: Antivirus/firewall, proxy/VPN, unstable internet, existing Python, etc.
