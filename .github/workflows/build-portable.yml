@@ -1,0 +1,71 @@
+name: Build MinerUI Portable
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - 'minerui-portable-v*'
+  pull_request:
+    paths:
+      - 'desktop-tauri/**'
+      - 'config/**'
+      - 'build-portable-package.bat'
+      - '.github/workflows/build-portable.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  build-windows-portable:
+    name: Build Windows portable zip
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Cache Cargo
+        uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: desktop-tauri/src-tauri
+
+      - name: Check portable source layout
+        shell: pwsh
+        run: |
+          $required = @(
+            'build-portable-package.bat',
+            'desktop-tauri/src-tauri/Cargo.toml',
+            'desktop-tauri/src-tauri/src/main.rs',
+            'desktop-tauri/ui/index.html',
+            'config/launcher.env'
+          )
+          foreach ($path in $required) {
+            if (!(Test-Path $path)) {
+              Write-Error "Missing required portable source file: $path"
+              exit 1
+            }
+          }
+
+      - name: Check MinerU wheel
+        shell: pwsh
+        run: |
+          if (!(Test-Path 'mineru-3.4.0-py3-none-any.whl')) {
+            Write-Error 'mineru-3.4.0-py3-none-any.whl is missing. Put the original MinerU 3.4.0 wheel in the repository root or attach it manually to releases.'
+            exit 1
+          }
+
+      - name: Build portable package
+        shell: cmd
+        run: build-portable-package.bat
+
+      - name: Upload portable artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: MinerUI-Portable-windows
+          path: |
+            dist/MinerUI-Portable.zip
+            dist/portable/**
+          if-no-files-found: error
