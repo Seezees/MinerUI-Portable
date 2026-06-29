@@ -1,11 +1,8 @@
 blank_issues_enabled: false
 contact_links:
-  - name: 🙏 Q&A
-    url: https://github.com/opendatalab/MinerU/discussions/categories/q-a
-    about: Ask the community for help
-  - name: 💡 Feature requests and ideas
-    url: https://github.com/opendatalab/MinerU/discussions/categories/ideas
-    about: Share ideas for new features
-  - name: 🙌 Show and tell
-    url: https://github.com/opendatalab/MinerU/discussions/categories/show-and-tell
-    about: Show off something you've made
+  - name: MinerU upstream project
+    url: https://github.com/opendatalab/MinerU
+    about: Use upstream MinerU for issues unrelated to the portable Windows launcher/runtime.
+  - name: MinerUI Portable releases
+    url: https://github.com/Seezees/MinerUI-Portable/releases
+    about: Download the latest portable Windows archive.
