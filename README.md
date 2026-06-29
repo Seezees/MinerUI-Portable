@@ -2,30 +2,82 @@
 
 [![Release](https://img.shields.io/github/v/release/Seezees/MinerUI-Portable?include_prereleases&sort=semver)](https://github.com/Seezees/MinerUI-Portable/releases)
 [![Windows](https://img.shields.io/badge/Windows-10%2F11-0078D4?logo=windows11)](#system-requirements)
-[![MinerU](https://img.shields.io/badge/MinerU-3.4.0-orange)](https://github.com/opendatalab/MinerU)
+[![MinerU backend](https://img.shields.io/badge/MinerU_backend-3.4.0-orange)](#supported-backends)
 [![Portable](https://img.shields.io/badge/portable-one%20folder-00b894)](docs/PORTABLE.md)
 [![License](https://img.shields.io/badge/license-MinerU%20Open%20Source%20License-blue)](LICENSE.md)
 
-**MinerUI Portable** is a Windows portable desktop wrapper for [MinerU](https://github.com/opendatalab/MinerU) 3.4.0.
+**MinerUI Portable** is a portable Windows desktop launcher for **MinerU 3.4.0**.
 
-The goal is simple: unpack one folder, run one executable, keep all heavy runtime files inside that same folder, and delete the folder when you no longer need it.
+It is made for the case where you do not want a global Python setup, a system-wide install, or a scattered AI toolchain. Unpack one folder, run one executable, keep all runtime files inside that folder, and delete the folder when you no longer need it.
 
-This project is **not the upstream MinerU project**. It packages MinerU for a portable Windows desktop workflow and adds a Tauri-based launcher for installation, Torch backend selection, cleanup and local WebUI startup.
+This repository is **not the upstream MinerU project**. It is a portable desktop packaging/wrapper project around the upstream MinerU Python package and Gradio UI.
 
-## What it does
+## Why this exists
 
-- Runs MinerU Gradio WebUI in a desktop window.
-- Installs local `uv`, Python 3.12 and a local `.venv` automatically.
-- Uses the original `mineru-3.4.0-py3-none-any.whl` placed next to the executable.
-- Lets you choose Torch backend: CPU, CUDA auto, CUDA 12.6 or CUDA 12.8.
-- Keeps runtime files inside the portable folder: `.venv`, `.cache`, `.tools`, `models`, `outputs`, `logs`.
-- Provides cleanup buttons for Torch/MinerU, uv cache, models, outputs or the whole runtime.
-- Shows live installation/startup logs in the launcher UI.
-- Supports multi-language launcher UI; MinerU Gradio itself may still fall back to the languages supported by upstream MinerU.
+Upstream MinerU is powerful, but a local Windows setup can become heavy and messy: Python, Torch, model cache, package cache and outputs may end up spread across the machine.
+
+MinerUI Portable keeps that runtime contained:
+
+```text
+MinerUI-Portable/
+  MinerUI Portable.exe
+  mineru-3.4.0-py3-none-any.whl
+  config/
+  .venv/
+  .cache/
+  .tools/
+  models/
+  outputs/
+  logs/
+```
+
+## Features
+
+- Portable one-folder Windows runtime.
+- Tauri desktop launcher for MinerU Gradio WebUI.
+- Automatic local `uv` bootstrap.
+- uv-managed Python 3.12.
+- Local `.venv` for MinerU, Torch and dependencies.
+- Torch backend selector:
+  - CPU
+  - CUDA auto
+  - CUDA 12.6
+  - CUDA 12.8
+- Live installation and startup log inside the launcher.
+- Runtime cleanup buttons for `.venv`, `.cache\uv`, models, outputs or all runtime data.
+- Multi-language launcher UI.
+- Uses the original MinerU 3.4.0 wheel placed next to the executable.
+
+## Supported backends
+
+MinerUI Portable has two separate meanings of “backend”:
+
+1. **MinerU backend version** — the MinerU Python package/wheel used by this portable release.
+2. **Torch backend** — CPU/CUDA wheel selection used by PyTorch inside the local MinerU environment.
+
+### MinerU backend support
+
+| Component | Supported in v1.0.0 | Notes |
+|---|---:|---|
+| MinerU backend | **3.4.0** | Primary supported version. Uses `mineru-3.4.0-py3-none-any.whl`. |
+| MinerU Gradio UI | **3.4.0** | Launched locally through the portable environment. |
+| MinerU local API/runtime | **3.4.0-compatible** | Managed by upstream `mineru-gradio`/MinerU code. |
+| Other MinerU versions | Not guaranteed | May work only after changing the wheel/version and rebuilding/testing. |
+
+### Torch backend support
+
+| Launcher option | `UV_TORCH_BACKEND` | Use case | Size/performance |
+|---|---|---|---|
+| CUDA auto | `auto` | Default mode for supported NVIDIA setups | Larger download, faster if CUDA works |
+| CUDA 12.6 | `cu126` | Pin CUDA 12.6 wheels | Larger download |
+| CUDA 12.8 | `cu128` | Pin CUDA 12.8 wheels | Larger download |
+| CPU | `cpu` | Smaller install, no CUDA dependency | Smaller, slower |
+
+Changing CPU/CUDA cleanly usually requires deleting `.venv` from the launcher UI and starting again.
 
 ## Download
 
-Open the [Releases](https://github.com/Seezees/MinerUI-Portable/releases) page and download the portable archive from the latest release.
+Open the Releases page and download the portable archive from the latest release.
 
 Recommended asset name:
 
@@ -35,7 +87,7 @@ MinerUI-Portable-v1.0.0-win10-11.zip
 
 ## Quick start
 
-1. Download the portable archive from Releases.
+1. Download the portable archive.
 2. Extract it to a writable folder, for example:
 
    ```text
@@ -81,7 +133,17 @@ MinerUI-Portable/
   logs/         # launcher and MinerU logs
 ```
 
-Deleting this folder removes the portable runtime.
+Torch is installed inside:
+
+```text
+.venv\Lib\site-packages\torch
+```
+
+Downloaded wheels/cache are stored in:
+
+```text
+.cache\uv
+```
 
 More details: [docs/PORTABLE.md](docs/PORTABLE.md).
 
